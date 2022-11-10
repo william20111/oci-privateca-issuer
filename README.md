@@ -1,5 +1,7 @@
 # oci-privateca-issuer
 
+** WORK IN PROGRESS **
+
 cert-manager external issuer for oci certificates
 
 ## Description
