@@ -1,0 +1,31 @@
+# permissions for end users to edit ocicaclusterissuers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: ocicaclusterissuer-editor-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: oci-privateca-issuer
+    app.kubernetes.io/part-of: oci-privateca-issuer
+    app.kubernetes.io/managed-by: kustomize
+  name: ocicaclusterissuer-editor-role
+rules:
+- apiGroups:
+  - ocica.cert-manager.io
+  resources:
+  - ocicaclusterissuers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ocica.cert-manager.io
+  resources:
+  - ocicaclusterissuers/status
+  verbs:
+  - get

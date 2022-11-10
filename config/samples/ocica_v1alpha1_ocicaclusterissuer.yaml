@@ -1,0 +1,12 @@
+apiVersion: ocica.cert-manager.io/v1alpha1
+kind: OCICAClusterIssuer
+metadata:
+  labels:
+    app.kubernetes.io/name: ocicaclusterissuer
+    app.kubernetes.io/instance: ocicaclusterissuer-sample
+    app.kubernetes.io/part-of: oci-privateca-issuer
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: oci-privateca-issuer
+  name: ocicaclusterissuer-sample
+spec:
+  # TODO(user): Add fields here
