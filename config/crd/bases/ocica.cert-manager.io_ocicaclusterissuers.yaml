@@ -54,6 +54,8 @@ spec:
                     type: string
                   privateKey:
                     type: string
+                  privateKeyPassPhrase:
+                    type: string
                   region:
                     type: string
                   tenancy:

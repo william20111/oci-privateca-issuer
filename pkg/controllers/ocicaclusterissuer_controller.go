@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	ocicav1alpha1 "github.com/william20111/oci-privateca-issuer/pkg/api/v1alpha1"
+	"github.com/william20111/oci-privateca-issuer/pkg/provisioner"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -31,6 +32,7 @@ import (
 
 // OCICAClusterIssuerReconciler reconciles a OCICAClusterIssuer object
 type OCICAClusterIssuerReconciler struct {
+	collection *provisioner.Collection
 	client.Client
 	Scheme *runtime.Scheme
 }
@@ -62,7 +64,14 @@ func (r *OCICAClusterIssuerReconciler) Reconcile(ctx context.Context, req ctrl.R
 		return ctrl.Result{}, err
 	}
 
-	return reconcile.Result{}, r.setStatus(ctx, iss, ocicav1alpha1.ConditionTrue, "Verified", "OriginIssuer verified and ready to sign certificates")
+	p, err := provisioner.New(logger, *iss)
+	if err != nil {
+		logger.Error(err, "failed to create provisioner")
+		_ = r.setStatus(ctx, iss, ocicav1alpha1.ConditionFalse, "Error", "Failed initialize provisioner")
+		return reconcile.Result{}, err
+	}
+	r.collection.Store(req.NamespacedName, p)
+	return reconcile.Result{}, r.setStatus(ctx, iss, ocicav1alpha1.ConditionTrue, "Verified", "OCI issuer verified and ready to sign certificates")
 }
 
 // SetupWithManager sets up the controller with the Manager.

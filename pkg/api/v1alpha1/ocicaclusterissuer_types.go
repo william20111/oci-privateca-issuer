@@ -99,3 +99,7 @@ type OCICAClusterIssuerList struct {
 func init() {
 	SchemeBuilder.Register(&OCICAClusterIssuer{}, &OCICAClusterIssuerList{})
 }
+
+func GetIssuer() (*OCICAClusterIssuer, error) {
+	return &OCICAClusterIssuer{}, nil
+}

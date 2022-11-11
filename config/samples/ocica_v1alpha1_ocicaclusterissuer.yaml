@@ -9,4 +9,5 @@ metadata:
     app.kubernetes.io/created-by: oci-privateca-issuer
   name: ocicaclusterissuer-sample
 spec:
-  # TODO(user): Add fields here
+  ocid: "ocid1.certificateauthority.oc1.phx.blah"
+
