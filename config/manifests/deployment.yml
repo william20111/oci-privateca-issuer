@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oci-private-issuer
+  namespace: oci-private-issuer
+spec:
+  selector:
+    matchLabels:
+      app: oci-private-issuer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: oci-private-issuer
+    spec:
+      serviceAccountName: oci-private-control
+      containers:
+        - image: cloudflare/oci-private-issuer:v0.0.1
+          name: oci-ca-controller
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+      terminationGracePeriodSeconds: 10

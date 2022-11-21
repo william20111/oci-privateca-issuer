@@ -1,0 +1,15 @@
+---
+# bind the cert-manager internal approver to approve
+# cert-manager.k8s.oci.com CertificateRequests
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-controller-approve:cert-manager-k8s-oci-com
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-controller-approve:cert-manager-k8s-oci-com
+subjects:
+  - kind: ServiceAccount
+    name: cert-manager
+    namespace: cert-manager
