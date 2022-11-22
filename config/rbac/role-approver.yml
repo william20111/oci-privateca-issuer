@@ -12,4 +12,4 @@ rules:
     verbs:
       - approve
     resourceNames:
-      - originissuers.cert-manager.k8s.oci.com/*
+      - ocica.cert-manager.k8s.oci.com/*

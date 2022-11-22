@@ -1,10 +1,9 @@
-# VERSION defines the project version for the bundle.
-# Update this value when you upgrade the version of your project.
-# To re-generate a bundle for another specific version without changing the standard setup, you can:
-# - use the VERSION as arg of the bundle target (e.g make bundle VERSION=0.0.2)
-# - use environment variables to overwrite this value (e.g export VERSION=0.0.2)
 ENVTEST_K8S_VERSION = 1.25.0
+CONTROLLER_TOOLS_VERSION ?= v0.10.0
 CONTROLLER_GEN ?= $(LOCALBIN)/controller-gen
+LOCALBIN ?= $(shell pwd)/bin
+$(LOCALBIN):
+	mkdir -p $(LOCALBIN)
 
 .PHONY: all
 all: build
@@ -50,14 +49,6 @@ deploy: manifests ## Deploy controller to the K8s cluster specified in ~/.kube/c
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config. Call with ignore-not-found=true to ignore resource not found errors during deletion.
 	kubectl delete --ignore-not-found=true -f config/rbac
 	kubectl delete --ignore-not-found=true -f config/manifests
-
-## Location to install dependencies to
-LOCALBIN ?= $(shell pwd)/bin
-$(LOCALBIN):
-	mkdir -p $(LOCALBIN)
-
-## Tool Versions
-CONTROLLER_TOOLS_VERSION ?= v0.10.0
 
 .PHONY: controller-gen
 controller-gen: $(CONTROLLER_GEN)
