@@ -109,18 +109,8 @@ func (r *OCICAClusterIssuerReconciler) setStatus(ctx context.Context, iss *ocica
 
 func validateIssuer(spec ocicav1alpha1.OCICAClusterIssuerSpec) error {
 	switch {
-	case spec.SecretRef.User != "":
-		return fmt.Errorf("user cant be empty in secret config")
-	case spec.SecretRef.Name != "":
-		return fmt.Errorf("name cant be empty in secret config")
-	case spec.SecretRef.Region != "":
-		return fmt.Errorf("region cant be empty in secret config")
-	case spec.SecretRef.FingerPrint != "":
-		return fmt.Errorf("fingerprint cant be empty in secret config")
-	case spec.SecretRef.PrivateKey != "":
-		return fmt.Errorf("private key cant be empty in secret config")
-	case spec.SecretRef.PrivateKeyPassphrase != "":
-		return fmt.Errorf("passphrase cant be empty in secret config")
+	case spec.OCID != "":
+		return fmt.Errorf("ocid cant be empty")
 	}
 	return nil
 }

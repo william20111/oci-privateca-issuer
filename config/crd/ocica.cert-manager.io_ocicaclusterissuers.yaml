@@ -39,31 +39,6 @@ spec:
               ocid:
                 description: Specifies the OCID of the private CA in OCI
                 type: string
-              secretRef:
-                description: Required for authentication using pem key to oci api
-                properties:
-                  fingerPrint:
-                    type: string
-                  name:
-                    description: name is unique within a namespace to reference a
-                      secret resource.
-                    type: string
-                  namespace:
-                    description: namespace defines the space within which the secret
-                      name must be unique.
-                    type: string
-                  privateKey:
-                    type: string
-                  privateKeyPassPhrase:
-                    type: string
-                  region:
-                    type: string
-                  tenancy:
-                    type: string
-                  user:
-                    type: string
-                type: object
-                x-kubernetes-map-type: atomic
             type: object
           status:
             description: OCICAClusterIssuerStatus defines the observed state of OCICAClusterIssuer

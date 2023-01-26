@@ -9,6 +9,7 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/certificates"
 	"github.com/oracle/oci-go-sdk/v65/certificatesmanagement"
 	"github.com/oracle/oci-go-sdk/v65/common"
+	"github.com/oracle/oci-go-sdk/v65/common/auth"
 	ocicav1alpha1 "github.com/william20111/oci-privateca-issuer/pkg/api/v1alpha1"
 	"k8s.io/apimachinery/pkg/types"
 	"sync"
@@ -58,12 +59,12 @@ type Provisioner struct {
 }
 
 func New(logger logr.Logger, iss ocicav1alpha1.OCICAClusterIssuer) (*Provisioner, error) {
-	caClient, err := certificatesmanagement.NewCertificatesManagementClientWithConfigurationProvider(common.NewRawConfigurationProvider(
-		iss.Spec.SecretRef.Tenancy, iss.Spec.SecretRef.User, iss.Spec.SecretRef.Region, iss.Spec.SecretRef.FingerPrint, iss.Spec.SecretRef.PrivateKey, &iss.Spec.SecretRef.PrivateKeyPassphrase,
-	))
-	certClient, err := certificates.NewCertificatesClientWithConfigurationProvider(common.NewRawConfigurationProvider(
-		iss.Spec.SecretRef.Tenancy, iss.Spec.SecretRef.User, iss.Spec.SecretRef.Region, iss.Spec.SecretRef.FingerPrint, iss.Spec.SecretRef.PrivateKey, &iss.Spec.SecretRef.PrivateKeyPassphrase,
-	))
+	configProvider, err := auth.InstancePrincipalConfigurationProvider()
+	if err != nil {
+		return nil, err
+	}
+	caClient, err := certificatesmanagement.NewCertificatesManagementClientWithConfigurationProvider(configProvider)
+	certClient, err := certificates.NewCertificatesClientWithConfigurationProvider(configProvider)
 	if err != nil {
 		return nil, err
 	}
@@ -135,5 +136,8 @@ func (p *Provisioner) Sign(ctx context.Context, cr *cmapi.CertificateRequest, lo
 	}
 
 	chainPem := res.GetCertChainPem()
+	if chainPem != nil {
+		return nil, fmt.Errorf("failed parsing certificate chain")
+	}
 	return []byte(*chainPem), nil
 }

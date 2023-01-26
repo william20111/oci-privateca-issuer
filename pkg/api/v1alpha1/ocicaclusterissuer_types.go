@@ -17,7 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -54,18 +53,6 @@ const (
 type OCICAClusterIssuerSpec struct {
 	// Specifies the OCID of the private CA in OCI
 	OCID string `json:"ocid,omitempty"`
-	// Required for authentication using pem key to oci api
-	SecretRef OCICredsSecretReference `json:"secretRef,omitempty"`
-}
-
-type OCICredsSecretReference struct {
-	v1.SecretReference   `json:""`
-	User                 string `json:"user,omitempty"`
-	FingerPrint          string `json:"fingerPrint,omitempty"`
-	Tenancy              string `json:"tenancy,omitempty"`
-	Region               string `json:"region,omitempty"`
-	PrivateKey           string `json:"privateKey,omitempty"`
-	PrivateKeyPassphrase string `json:"privateKeyPassPhrase,omitempty"`
 }
 
 // OCICAClusterIssuerStatus defines the observed state of OCICAClusterIssuer
