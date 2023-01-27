@@ -15,7 +15,7 @@ spec:
     spec:
       serviceAccountName: oci-private-control
       containers:
-        - image: cloudflare/oci-private-issuer:v0.0.1
+        - image: jimbotux/oci-private-issuer:v0.0.1
           name: oci-ca-controller
           resources:
             limits:
