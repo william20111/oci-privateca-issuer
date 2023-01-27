@@ -24,7 +24,7 @@ jobs:
       - name: build container
         uses: redhat-actions/buildah-build@v2
         with:
-          platforms: linux/amd64 linux/arm64
+          platforms: linux/amd64 linux/arm64v8
           image: docker.io/jimbotux/oci-private-issuer
           tags: latest ${{ github.sha }}
           containerfiles: |
