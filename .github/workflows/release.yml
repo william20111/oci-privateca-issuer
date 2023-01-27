@@ -27,7 +27,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           platforms: linux/amd64 linux/arm64
-          image: jimbotux/oci-private-issuer
+          image: docker.io/jimbotux/oci-private-issuer
           tags: latest ${{ github.sha }}
           containerfiles: |
             ./Containerfile
