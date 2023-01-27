@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.19-bullseye as builder
+FROM docker/golang:1.19 as builder
 
 WORKDIR /workspace
 COPY go.mod go.mod
