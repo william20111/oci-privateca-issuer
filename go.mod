@@ -9,7 +9,7 @@ require (
 	github.com/onsi/gomega v1.24.2
 	github.com/oracle/oci-go-sdk/v65 v65.28.2
 	k8s.io/api v0.26.0
-	k8s.io/apimachinery v0.26.0
+	k8s.io/apimachinery v0.26.1
 	k8s.io/client-go v0.26.0
 	k8s.io/utils v0.0.0-20221128185143-99ec85e7a448
 	sigs.k8s.io/controller-runtime v0.14.1
