@@ -19,6 +19,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+const (
+	OCICAClusterIssuerKind = "OCICAClusterIssuer"
+)
+
 // CertificateRequestReconciler reconciles a AWSPCAIssuer object
 type CertificateRequestReconciler struct {
 	client.Client
@@ -113,7 +117,7 @@ func (r *CertificateRequestReconciler) Reconcile(ctx context.Context, req ctrl.R
 		Namespace: cr.Namespace,
 		Name:      cr.Spec.IssuerRef.Name,
 	}
-	if cr.Spec.IssuerRef.Kind == "AWSPCAClusterIssuer" {
+	if cr.Spec.IssuerRef.Kind == OCICAClusterIssuerKind {
 		issuerName.Namespace = ""
 	}
 
