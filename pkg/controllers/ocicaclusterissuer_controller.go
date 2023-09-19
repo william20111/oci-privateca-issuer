@@ -108,9 +108,15 @@ func (r *OCICAClusterIssuerReconciler) setStatus(ctx context.Context, iss *ocica
 }
 
 func validateIssuer(spec ocicav1alpha1.OCICAClusterIssuerSpec) error {
-	switch {
-	case spec.OCID != "":
-		return fmt.Errorf("ocid cant be empty")
+	if spec.AuthorityID == "" {
+		return fmt.Errorf("authority id cant be empty")
 	}
+	if spec.CompartmentID == "" {
+		return fmt.Errorf("compartment id cant be empty")
+	}
+	if spec.TenancyID == "" {
+		return fmt.Errorf("tenancy id cant be empty")
+	}
+
 	return nil
 }

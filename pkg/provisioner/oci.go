@@ -9,7 +9,6 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/certificates"
 	"github.com/oracle/oci-go-sdk/v65/certificatesmanagement"
 	"github.com/oracle/oci-go-sdk/v65/common"
-	"github.com/oracle/oci-go-sdk/v65/common/auth"
 	ocicav1alpha1 "github.com/william20111/oci-privateca-issuer/pkg/api/v1alpha1"
 	"k8s.io/apimachinery/pkg/types"
 	"sync"
@@ -56,10 +55,12 @@ type Provisioner struct {
 	certificateClient ociCertificateClient
 	logger            logr.Logger
 	iss               ocicav1alpha1.OCICAClusterIssuer
+	compartmentID     string
+	tenancyID         string
 }
 
 func New(logger logr.Logger, iss ocicav1alpha1.OCICAClusterIssuer) (*Provisioner, error) {
-	configProvider, err := auth.InstancePrincipalConfigurationProvider()
+	configProvider, err := common.ConfigurationProviderFromFileWithProfile("/Users/wfleming/.oci/config", "DEFAULT", "")
 	if err != nil {
 		return nil, err
 	}
@@ -73,19 +74,21 @@ func New(logger logr.Logger, iss ocicav1alpha1.OCICAClusterIssuer) (*Provisioner
 		caClient:          caClient,
 		certificateClient: certClient,
 		iss:               iss,
+		compartmentID:     iss.Spec.CompartmentID,
+		tenancyID:         iss.Spec.TenancyID,
 	}
 	return p, nil
 }
 
 func (p *Provisioner) Validate(ctx context.Context) error {
 	res, err := p.caClient.GetCertificateAuthority(ctx, certificatesmanagement.GetCertificateAuthorityRequest{
-		CertificateAuthorityId: common.String(p.iss.Spec.OCID),
+		CertificateAuthorityId: common.String(p.iss.Spec.AuthorityID),
 	})
 	if err != nil {
 		p.logger.Error(err, "cant get certificate authority")
 		return err
 	}
-	if res.Id != &p.iss.Spec.OCID {
+	if res.Id != &p.iss.Spec.AuthorityID {
 		return fmt.Errorf("cant find the certificate authority")
 	}
 	return nil
@@ -103,14 +106,15 @@ func (p *Provisioner) Sign(ctx context.Context, cr *cmapi.CertificateRequest, lo
 	} else {
 		expiry = start.Add(cr.Spec.Duration.Duration)
 	}
+
 	certificateSignResponse, err := p.caClient.CreateCertificate(ctx, certificatesmanagement.CreateCertificateRequest{
 		CreateCertificateDetails: certificatesmanagement.CreateCertificateDetails{
-			Name:          common.String(cr.Name),
-			CompartmentId: nil,
+			Name:          &cr.Name,
+			CompartmentId: &p.iss.Spec.CompartmentID,
 			CertificateConfig: certificatesmanagement.CreateCertificateManagedExternallyIssuedByInternalCaConfigDetails{
-				IssuerCertificateAuthorityId: common.String(p.iss.Spec.OCID),
+				IssuerCertificateAuthorityId: &p.iss.Spec.AuthorityID,
 				CsrPem:                       common.String(string(cr.Spec.Request)),
-				VersionName:                  common.String(cr.Name),
+				VersionName:                  &cr.Name,
 				Validity: &certificatesmanagement.Validity{
 					TimeOfValidityNotAfter:  &common.SDKTime{Time: expiry},
 					TimeOfValidityNotBefore: &common.SDKTime{Time: start},
@@ -125,6 +129,7 @@ func (p *Provisioner) Sign(ctx context.Context, cr *cmapi.CertificateRequest, lo
 	if err != nil {
 		return nil, err
 	}
+
 	res, err := p.certificateClient.GetCertificateBundle(ctx, certificates.GetCertificateBundleRequest{
 		CertificateId:          certificateSignResponse.Id,
 		CertificateVersionName: common.String(cr.Name),

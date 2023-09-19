@@ -36,9 +36,16 @@ spec:
           spec:
             description: OCICAClusterIssuerSpec defines the desired state of OCICAClusterIssuer
             properties:
-              ocid:
+              authority_id:
+                type: string
+              compartment_id:
+                type: string
+              tenancy_id:
                 description: Specifies the OCID of the private CA in OCI
                 type: string
+            required:
+            - authority_id
+            - compartment_id
             type: object
           status:
             description: OCICAClusterIssuerStatus defines the observed state of OCICAClusterIssuer

@@ -52,7 +52,9 @@ const (
 // OCICAClusterIssuerSpec defines the desired state of OCICAClusterIssuer
 type OCICAClusterIssuerSpec struct {
 	// Specifies the OCID of the private CA in OCI
-	OCID string `json:"ocid,omitempty"`
+	TenancyID     string `json:"tenancy_id,omitempty"`
+	CompartmentID string `json:"compartment_id"`
+	AuthorityID   string `json:"authority_id"`
 }
 
 // OCICAClusterIssuerStatus defines the observed state of OCICAClusterIssuer

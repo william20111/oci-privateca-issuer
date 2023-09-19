@@ -9,5 +9,7 @@ metadata:
     app.kubernetes.io/created-by: oci-privateca-issuer
   name: ocicaclusterissuer-sample
 spec:
-  ocid: "ocid1.certificateauthority.oc1.phx.blah"
+  authority_id: "ocid1.certificateauthority.oc1.phx.aaaaaaaaba3pv6wkcr4jqae5f44n2b2m2yt2j6rx32uzr4h25vqstifsfdsq"
+  tenancy_id: "ocid1.tenancy.oc1..aaaaaaaaba3pv6wkcr4jqae5f44n2b2m2yt2j6rx32uzr4h25vqstifsfdsq"
+  compartment_id: "ocid1.compartment.oc1.phx.aaaaaaaaba3pv6wkcr4jqae5f44n2b2m2yt2j6rx32uzr4h25vqstifsfdsq"
 
